@@ -10,3 +10,4 @@ export { default as Navbar } from "./Navbar";
 export { default as FeedCard } from "./FeedCard";
 export { default as GrindCard } from "./GrindCard";
 export { default as Modal } from "./Modal";
+export { default as SocialAuthButton } from "./SocialAuthButton";
