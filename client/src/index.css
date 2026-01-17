@@ -1,0 +1,21 @@
+/* app.css */
+@import "tailwindcss";
+@plugin "daisyui";
+
+@plugin "daisyui/theme" {
+  name: "grindset";
+  default: true;
+  prefersdark: true;
+  color-scheme: dark;
+
+  /* Core Colors */
+  --color-primary: #ccff00; /* Electric Lime */
+  --color-secondary: #00ffa3; /* Spring Green (Success) */
+  --color-accent: #ff3b3b; /* Crimson (Stop/Alert) */
+  --color-neutral: #161616; /* Surface/Card */
+  --color-base-100: #0f0f0f; /* Background */
+
+  /* UI Refinement */
+  --radius-box: 1rem; /* Rounded-xl */
+  --radius-btn: 0.5rem; /* Slightly sharper for a technical feel */
+}
