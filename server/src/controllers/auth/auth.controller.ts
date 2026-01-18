@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
-import { signupUser, loginUser } from "../../services/auth/auth-service";
+import { signupUser, loginUser, getUser } from "../../services/auth/auth-service";
+import { AuthMiddlewareRequest } from "../../middlewares/auth.middleware";
 
 interface AuthControllerPayload {
     email: string;
@@ -75,4 +76,22 @@ export const loginController = async (req: Request, res: Response) => {
         }
 }
 
-   
+
+
+export const getUserController = async (req: AuthMiddlewareRequest, res: Response) => {
+    try {
+        const userId = req.userId as string;
+        if (!userId) {
+            return res.status(400).json({ message: "User ID is required" });
+        }
+        const user = await getUser(userId);
+        return res.status(200).json({ user, message: "User found successfully" });
+    } catch (error) {
+        if (error instanceof Error) {
+            if (error.message === "User not found") {
+                return res.status(400).json({ message: error.message });
+            }
+        }
+        return res.status(500).json({ message: "Internal server error" });
+    }
+}
