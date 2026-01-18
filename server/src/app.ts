@@ -7,10 +7,12 @@ dotenv.config();
 
 // Import routes
 import exampleRoutes from "./routes/example";
+import indexRoutes from "./routes/index.routes";
 
 // Import middlewares
 import { errorHandler } from "./middlewares/errorHandler";
 import { logger } from "./middlewares/logger";
+
 
 const app: Application = express();
 
@@ -29,6 +31,8 @@ app.get("/", (req: Request, res: Response) => {
 
 // API routes
 app.use("/api/example", exampleRoutes);
+
+app.use("/api/v1", indexRoutes);
 
 // 404 handler
 app.use((req: Request, res: Response) => {
