@@ -1,0 +1,101 @@
+{
+  "sessions": [
+    {
+      "id": "1",
+      "title": "Advanced Calculus",
+      "subtitle": "Deep Work Session",
+      "duration": "02:45:00",
+      "sets": 5,
+      "notes": "Focused on integration by parts. 30 pages read.",
+      "verified": true,
+      "date": "2026-01-18T10:30:00Z"
+    },
+    {
+      "id": "2",
+      "title": "Data Structures",
+      "subtitle": "Deep Work Session",
+      "duration": "01:30:00",
+      "sets": 3,
+      "notes": "Completed binary tree traversal algorithms.",
+      "verified": true,
+      "date": "2026-01-17T14:20:00Z"
+    },
+    {
+      "id": "3",
+      "title": "Machine Learning",
+      "subtitle": "Deep Work Session",
+      "duration": "03:15:00",
+      "sets": 7,
+      "notes": "Neural network backpropagation study session.",
+      "verified": true,
+      "date": "2026-01-16T09:15:00Z"
+    },
+    {
+      "id": "4",
+      "title": "Linear Algebra",
+      "subtitle": "Deep Work Session",
+      "duration": "02:00:00",
+      "sets": 4,
+      "notes": "Matrix operations and eigenvalues.",
+      "verified": true,
+      "date": "2026-01-15T16:45:00Z"
+    },
+    {
+      "id": "5",
+      "title": "Computer Networks",
+      "subtitle": "Deep Work Session",
+      "duration": "01:45:00",
+      "sets": 3,
+      "notes": "TCP/IP protocol stack deep dive.",
+      "verified": true,
+      "date": "2026-01-14T11:00:00Z"
+    }
+  ],
+  "goals": [
+    {
+      "id": "1",
+      "title": "Daily Study Goal",
+      "targetHours": 4,
+      "currentHours": 3,
+      "period": "daily",
+      "active": true
+    },
+    {
+      "id": "2",
+      "title": "Weekly Study Goal",
+      "targetHours": 20,
+      "currentHours": 15,
+      "period": "weekly",
+      "active": true
+    },
+    {
+      "id": "3",
+      "title": "Monthly Study Goal",
+      "targetHours": 80,
+      "currentHours": 65,
+      "period": "monthly",
+      "active": true
+    }
+  ],
+  "profile": {
+    "name": "John Doe",
+    "email": "john.doe@example.com",
+    "avatar": null,
+    "timezone": "UTC",
+    "notifications": {
+      "email": true,
+      "push": true,
+      "dailyReminder": true
+    }
+  },
+  "stats": {
+    "totalSessions": 127,
+    "totalHours": 342,
+    "currentStreak": 42,
+    "averageFocusScore": 92,
+    "todaySessions": 5,
+    "todayHours": 4.5,
+    "todayFocusScore": 92
+  }
+}
+
