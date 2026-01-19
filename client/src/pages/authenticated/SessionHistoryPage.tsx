@@ -8,6 +8,7 @@ const SessionHistoryPage = () => {
 
   const handleSessionClick = (sessionId: string) => {
     console.log(`Session clicked: ${sessionId}`);
+    // Navigation handled by FeedCard onClick
   };
 
   const handleFilter = () => {
@@ -44,14 +45,15 @@ const SessionHistoryPage = () => {
         {/* Sessions List */}
         <div className="space-y-4">
           {sessions.map((session) => (
-            <FeedCard
-              key={session.id}
-              title={session.title}
-              duration={session.duration}
-              sets={session.sets}
-              verified={session.verified}
-              onClick={() => handleSessionClick(session.id)}
-            />
+            <Link key={session.id} to={`/sessions/${session.id}`}>
+              <FeedCard
+                title={session.title}
+                duration={session.duration}
+                sets={session.sets}
+                verified={session.verified}
+                onClick={() => handleSessionClick(session.id)}
+              />
+            </Link>
           ))}
         </div>
 

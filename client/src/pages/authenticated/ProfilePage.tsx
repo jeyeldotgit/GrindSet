@@ -42,10 +42,17 @@ const ProfilePage = () => {
             >
               ← Back to Dashboard
             </Link>
-            <h1 className="text-4xl font-black italic uppercase tracking-tighter text-primary mb-2">
-              Profile & Settings
-            </h1>
-            <p className="text-gray-400">Manage your account settings</p>
+            <div className="flex justify-between items-center">
+              <div>
+                <h1 className="text-4xl font-black italic uppercase tracking-tighter text-primary mb-2">
+                  Profile & Settings
+                </h1>
+                <p className="text-gray-400">Manage your account settings</p>
+              </div>
+              <Link to="/profile/stats">
+                <Button variant="ghost">View Statistics</Button>
+              </Link>
+            </div>
           </div>
 
           {/* Profile Information */}
