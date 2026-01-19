@@ -7,6 +7,8 @@ export { default as Input } from "./Input";
 export { default as Textarea } from "./Textarea";
 export { default as Select } from "./Select";
 export { default as Navbar } from "./Navbar";
+export { default as EnhancedNavbar } from "./EnhancedNavbar";
+export { default as Breadcrumbs } from "./Breadcrumbs";
 export { default as FeedCard } from "./FeedCard";
 export { default as GrindCard } from "./GrindCard";
 export { default as Modal } from "./Modal";

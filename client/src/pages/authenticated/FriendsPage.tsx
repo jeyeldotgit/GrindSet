@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { UserPlus, Check, X, Search, User } from "lucide-react";
-import { Navbar, Button, Input } from "../../components/ui";
+import { EnhancedNavbar, Button, Input } from "../../components/ui";
 
 const FriendsPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -31,7 +31,7 @@ const FriendsPage = () => {
 
   return (
     <div className="min-h-screen bg-base-100">
-      <Navbar />
+      <EnhancedNavbar unreadNotifications={3} />
 
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-4xl mx-auto">

@@ -16,6 +16,7 @@ import SquadDetailPage from "./pages/authenticated/SquadDetailPage";
 import CreateSquadPage from "./pages/authenticated/CreateSquadPage";
 import NotificationsPage from "./pages/authenticated/NotificationsPage";
 
+
 const App = () => {
   return (
     <Routes>
@@ -35,6 +36,7 @@ const App = () => {
       <Route path="/squads/:id" element={<SquadDetailPage />} />
       <Route path="/squads" element={<SquadsPage />} />
       <Route path="/notifications" element={<NotificationsPage />} />
+  
     </Routes>
   );
 };

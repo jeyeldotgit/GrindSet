@@ -1,6 +1,6 @@
 import { Link, useParams } from "react-router-dom";
-import { ArrowLeft, Users, Trophy, TrendingUp, Crown } from "lucide-react";
-import { Navbar, Button, StatDisplay, FeedCard } from "../../components/ui";
+import { Users, Trophy, TrendingUp, Crown } from "lucide-react";
+import { EnhancedNavbar, Breadcrumbs, Button, StatDisplay, FeedCard } from "../../components/ui";
 import mockData from "../../mockdata.json";
 
 const SquadDetailPage = () => {
@@ -13,19 +13,13 @@ const SquadDetailPage = () => {
 
   return (
     <div className="min-h-screen bg-base-100">
-      <Navbar />
+      <EnhancedNavbar unreadNotifications={3} />
 
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-6xl mx-auto">
           {/* Header */}
           <div className="mb-8">
-            <Link
-              to="/squads"
-              className="text-sm text-primary hover:underline mb-4 inline-flex items-center gap-2"
-            >
-              <ArrowLeft className="w-4 h-4" />
-              Back to Squads
-            </Link>
+            <Breadcrumbs className="mb-4" />
             <h1 className="text-4xl font-black italic uppercase tracking-tighter text-primary mb-2">
               Study Warriors
             </h1>

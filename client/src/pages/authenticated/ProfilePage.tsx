@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Bell, Save } from "lucide-react";
-import { Navbar, Button, Input } from "../../components/ui";
+import { EnhancedNavbar, Breadcrumbs, Button, Input } from "../../components/ui";
 import mockData from "../../mockdata.json";
 
 const ProfilePage = () => {
@@ -30,18 +30,13 @@ const ProfilePage = () => {
 
   return (
     <div className="min-h-screen bg-base-100">
-      <Navbar />
+      <EnhancedNavbar unreadNotifications={3} />
 
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-3xl mx-auto">
           {/* Header */}
           <div className="mb-8">
-            <Link
-              to="/dashboard"
-              className="text-sm text-primary hover:underline mb-4 inline-block"
-            >
-              ← Back to Dashboard
-            </Link>
+            <Breadcrumbs className="mb-4" />
             <div className="flex justify-between items-center">
               <div>
                 <h1 className="text-4xl font-black italic uppercase tracking-tighter text-primary mb-2">

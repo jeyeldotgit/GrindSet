@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Bell, Check, X, Trash2 } from "lucide-react";
-import { Navbar, Button } from "../../components/ui";
+import { EnhancedNavbar, Button } from "../../components/ui";
 
 const NotificationsPage = () => {
   const notifications = [
@@ -43,7 +43,7 @@ const NotificationsPage = () => {
 
   return (
     <div className="min-h-screen bg-base-100">
-      <Navbar />
+      <EnhancedNavbar unreadNotifications={unreadCount} />
 
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-3xl mx-auto">

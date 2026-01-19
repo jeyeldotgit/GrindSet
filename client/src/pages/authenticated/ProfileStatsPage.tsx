@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import { ArrowLeft, Trophy, Calendar, BarChart3, Flame } from "lucide-react";
-import { Navbar, StatDisplay, FocusProgress } from "../../components/ui";
+import { Trophy, Calendar, BarChart3, Flame } from "lucide-react";
+import { EnhancedNavbar, Breadcrumbs, StatDisplay, FocusProgress } from "../../components/ui";
 import mockData from "../../mockdata.json";
 
 const ProfileStatsPage = () => {
@@ -8,19 +8,13 @@ const ProfileStatsPage = () => {
 
   return (
     <div className="min-h-screen bg-base-100">
-      <Navbar />
+      <EnhancedNavbar unreadNotifications={3} />
 
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-6xl mx-auto">
           {/* Header */}
           <div className="mb-8">
-            <Link
-              to="/profile"
-              className="text-sm text-primary hover:underline mb-4 inline-flex items-center gap-2"
-            >
-              <ArrowLeft className="w-4 h-4" />
-              Back to Profile
-            </Link>
+            <Breadcrumbs className="mb-4" />
             <h1 className="text-4xl font-black italic uppercase tracking-tighter text-primary mb-2">
               Statistics
             </h1>

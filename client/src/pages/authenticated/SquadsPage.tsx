@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Users, Plus, Trophy, TrendingUp } from "lucide-react";
-import { Navbar, Button, StatDisplay } from "../../components/ui";
+import { EnhancedNavbar, Button, StatDisplay } from "../../components/ui";
 
 const SquadsPage = () => {
   const squads = [
@@ -26,7 +26,7 @@ const SquadsPage = () => {
 
   return (
     <div className="min-h-screen bg-base-100">
-      <Navbar />
+      <EnhancedNavbar unreadNotifications={3} />
 
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-4xl mx-auto">

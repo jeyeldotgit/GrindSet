@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { Zap, Target, TrendingUp, Clock } from "lucide-react";
 import {
-  Navbar,
+  EnhancedNavbar,
   Button,
   StatDisplay,
   FeedCard,
@@ -19,20 +19,7 @@ const DashboardPage = () => {
 
   return (
     <div className="min-h-screen bg-base-100">
-      <Navbar
-        items={[
-          {
-            label: "Sessions",
-            path: "/sessions",
-            icon: <Zap className="w-5 h-5" />,
-          },
-          {
-            label: "Goals",
-            path: "/goals",
-            icon: <Target className="w-5 h-5" />,
-          },
-        ]}
-      />
+      <EnhancedNavbar unreadNotifications={3} />
 
       <div className="container mx-auto px-4 py-8">
         {/* Header */}

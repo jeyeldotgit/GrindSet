@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Save, Users } from "lucide-react";
-import { Navbar, Button, Input, Textarea } from "../../components/ui";
+import { Save, Users } from "lucide-react";
+import { EnhancedNavbar, Breadcrumbs, Button, Input, Textarea } from "../../components/ui";
 
 const CreateSquadPage = () => {
   const [name, setName] = useState("");
@@ -14,19 +14,13 @@ const CreateSquadPage = () => {
 
   return (
     <div className="min-h-screen bg-base-100">
-      <Navbar />
+      <EnhancedNavbar unreadNotifications={3} />
 
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-2xl mx-auto">
           {/* Header */}
           <div className="mb-8">
-            <Link
-              to="/squads"
-              className="text-sm text-primary hover:underline mb-4 inline-flex items-center gap-2"
-            >
-              <ArrowLeft className="w-4 h-4" />
-              Back to Squads
-            </Link>
+            <Breadcrumbs className="mb-4" />
             <h1 className="text-4xl font-black italic uppercase tracking-tighter text-primary mb-2">
               Create Squad
             </h1>

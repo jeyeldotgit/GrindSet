@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Zap, Filter } from "lucide-react";
-import { Navbar, Button, FeedCard, GrindCard } from "../../components/ui";
+import { EnhancedNavbar, Button, FeedCard } from "../../components/ui";
 import mockData from "../../mockdata.json";
 
 const SessionHistoryPage = () => {
@@ -17,7 +17,7 @@ const SessionHistoryPage = () => {
 
   return (
     <div className="min-h-screen bg-base-100">
-      <Navbar />
+      <EnhancedNavbar unreadNotifications={3} />
 
       <div className="container mx-auto px-4 py-8">
         {/* Header */}

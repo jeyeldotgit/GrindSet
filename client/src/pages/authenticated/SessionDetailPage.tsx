@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { ArrowLeft, Edit, Save, Trash2, Upload } from "lucide-react";
-import { Navbar, Button, Input, Textarea, GrindCard } from "../../components/ui";
+import { Edit, Save, Trash2, Upload } from "lucide-react";
+import { EnhancedNavbar, Breadcrumbs, Button, Input, Textarea, GrindCard } from "../../components/ui";
 import mockData from "../../mockdata.json";
 
 const SessionDetailPage = () => {
@@ -14,7 +14,7 @@ const SessionDetailPage = () => {
   if (!session) {
     return (
       <div className="min-h-screen bg-base-100">
-        <Navbar />
+        <EnhancedNavbar unreadNotifications={3} />
         <div className="container mx-auto px-4 py-8 text-center">
           <h1 className="text-2xl font-bold mb-4">Session not found</h1>
           <Link to="/sessions">
@@ -40,19 +40,13 @@ const SessionDetailPage = () => {
 
   return (
     <div className="min-h-screen bg-base-100">
-      <Navbar />
+      <EnhancedNavbar unreadNotifications={3} />
 
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-4xl mx-auto">
           {/* Header */}
           <div className="mb-8">
-            <Link
-              to="/sessions"
-              className="text-sm text-primary hover:underline mb-4 inline-flex items-center gap-2"
-            >
-              <ArrowLeft className="w-4 h-4" />
-              Back to Sessions
-            </Link>
+            <Breadcrumbs className="mb-4" />
             <div className="flex justify-between items-center">
               <h1 className="text-4xl font-black italic uppercase tracking-tighter text-primary mb-2">
                 Session Details

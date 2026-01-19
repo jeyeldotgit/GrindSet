@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Users, Zap } from "lucide-react";
-import { Navbar, Button, GrindCard, ReactionButton } from "../../components/ui";
+import { EnhancedNavbar, Button, GrindCard, ReactionButton } from "../../components/ui";
 import mockData from "../../mockdata.json";
 
 const FeedPage = () => {
@@ -13,7 +13,7 @@ const FeedPage = () => {
 
   return (
     <div className="min-h-screen bg-base-100">
-      <Navbar />
+      <EnhancedNavbar unreadNotifications={3} />
 
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-4xl mx-auto">
