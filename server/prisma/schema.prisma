@@ -13,15 +13,24 @@ datasource db {
   provider = "postgresql"
 }
 
+// Users
 model User {
-  id String @id @default(uuid())
-  email String @unique
-  password String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  sessions Session[]
+  id            String    @id @default(uuid())
+  email         String    @unique
+  password      String
+  name          String?
+  avatar        String?   // URL to avatar image
+  timezone      String    @default("UTC")
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // Relations
+  sessions      Session[]        // JWT refresh token sessions
+  grindSessions GrindSession[]   // Study/work sessions
+  reactions     Reaction[]
 }
 
+// Refresh token sessions
 model Session {
   id        String   @id @default(cuid())
   token     String   @unique
@@ -32,4 +41,70 @@ model Session {
   
   @@index([userId])
    @@index([token])
+}
+
+// Grind sessions
+model GrindSession {
+  id            String    @id @default(uuid())
+  userId        String
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // Session Details
+  title         String    // e.g., "Advanced Calculus"
+  subject       String?   // Subject category
+  notes         String?
+  photoUrl      String?   // Optional proof photo
+  
+  // Timer Data
+  duration      Int       // Total seconds
+  pomodoroSets  Int       @default(0) // Number of 25-min sets completed
+  focusScore    Int       @default(0) // Percentage (0-100)
+  
+  // Status
+  status        SessionStatus @default(COMPLETED)
+  isHardMode    Boolean   @default(false)
+  didNotFinish  Boolean   @default(false) // DNF flag
+  
+  // Timestamps
+  startedAt     DateTime
+  endedAt       DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  accumulatedTime Int      @default(0)  // in seconds
+  lastPausedAt    DateTime?
+
+  // Relations
+  reactions     Reaction[]
+  
+  @@index([userId])
+  @@index([createdAt])
+  @@index([status])
+}
+
+enum SessionStatus {
+  ACTIVE
+  PAUSED
+  COMPLETED
+  ABANDONED
+}
+
+// Reactions to grind sessions
+model Reaction {
+  id            String    @id @default(uuid())
+  grindSessionId String
+  grindSession  GrindSession @relation(fields: [grindSessionId], references: [id], onDelete: Cascade)
+  userId        String
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type          ReactionType
+  
+  createdAt     DateTime  @default(now())
+  
+  @@unique([grindSessionId, userId])
+  @@index([grindSessionId])
+  @@index([userId])
+}
+
+enum ReactionType {
+  FIRE      // 🔥
+  RESPECT   // 🙏
 }
