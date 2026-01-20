@@ -1,7 +1,8 @@
-import express, { Application, Request, Response, NextFunction } from "express";
+import express, { Application, Request, Response } from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
+import swaggerUi from "swagger-ui-express";
 
 // Load environment variables
 dotenv.config();
@@ -13,6 +14,9 @@ import indexRoutes from "./routes/index.routes";
 // Import middlewares
 import { errorHandler } from "./middlewares/errorHandler";
 import { logger } from "./middlewares/logger";
+
+// Import Swagger configuration
+import swaggerSpec from "./config/swagger";
 
 
 const app: Application = express();
@@ -26,9 +30,21 @@ app.use(cookieParser());
 app.use(logger);
 
 // Health check route
-app.get("/", (req: Request, res: Response) => {
+app.get("/", (_req: Request, res: Response) => {
   res.status(200).json({ status: "ok", message: "Server is running" });
 });
+
+// Swagger JSON endpoint
+app.get("/api-docs.json", (_req: Request, res: Response) => {
+  res.setHeader("Content-Type", "application/json");
+  res.send(swaggerSpec);
+});
+
+// Swagger UI
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
+  customCss: '.swagger-ui .topbar { display: none }',
+  customSiteTitle: "Grindset API Documentation",
+}));
 
 // API routes
 app.use("/api/example", exampleRoutes);
@@ -36,7 +52,7 @@ app.use("/api/example", exampleRoutes);
 app.use("/api/v1", indexRoutes);
 
 // 404 handler
-app.use((req: Request, res: Response) => {
+app.use((_req: Request, res: Response) => {
   res.status(404).json({ error: "Route not found" });
 });
 
