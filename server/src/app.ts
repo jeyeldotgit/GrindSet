@@ -22,7 +22,26 @@ import swaggerSpec from "./config/swagger";
 const app: Application = express();
 
 // Middleware
-app.use(cors());
+const allowedOrigins = (
+  process.env.CORS_ORIGINS ?? "http://localhost:5173"
+)
+  .split(",")
+  .map((o) => o.trim())
+  .filter(Boolean);
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      // allow non-browser requests (e.g. curl/postman) with no Origin header
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.includes(origin)) return callback(null, true);
+
+      return callback(new Error(`CORS blocked for origin: ${origin}`));
+    },
+    credentials: true,
+  })
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
