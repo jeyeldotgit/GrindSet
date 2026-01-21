@@ -7,19 +7,19 @@ import {
   FeedCard,
   FocusProgress,
 } from "../../components/ui";
+import { useDashboard } from "../../hooks/useDashboard";
 
 const DashboardPage = () => {
-  const handleStartSession = () => {
-    console.log("Start session clicked");
-  };
-
-  const handleSessionClick = (sessionId: string) => {
-    console.log(`Session clicked: ${sessionId}`);
-  };
+  const {
+    handleStartSession,
+    handleSessionClick,
+    dashboardData,
+    unreadNotifications,
+  } = useDashboard();
 
   return (
     <div className="min-h-screen bg-base-100">
-      <EnhancedNavbar unreadNotifications={3} />
+      <EnhancedNavbar unreadNotifications={unreadNotifications} />
 
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
@@ -47,19 +47,23 @@ const DashboardPage = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <StatDisplay
                 title="Sessions"
-                value="5"
-                description="+2 from yesterday"
+                value={dashboardData.todayPerformance.sessions.value}
+                description={
+                  dashboardData.todayPerformance.sessions.description
+                }
                 highlight
               />
               <StatDisplay
                 title="Time"
-                value="4h 30m"
-                description="Avg 54m/session"
+                value={dashboardData.todayPerformance.time.value}
+                description={dashboardData.todayPerformance.time.description}
               />
               <StatDisplay
                 title="Focus Score"
-                value="92%"
-                description="Personal best"
+                value={dashboardData.todayPerformance.focusScore.value}
+                description={
+                  dashboardData.todayPerformance.focusScore.description
+                }
                 highlight
               />
             </div>
@@ -81,27 +85,16 @@ const DashboardPage = () => {
               </Link>
             </div>
             <div className="space-y-4">
-              <FeedCard
-                title="Advanced Calculus"
-                duration="2h 45m"
-                sets={5}
-                verified
-                onClick={() => handleSessionClick("1")}
-              />
-              <FeedCard
-                title="Data Structures"
-                duration="1h 30m"
-                sets={3}
-                verified
-                onClick={() => handleSessionClick("2")}
-              />
-              <FeedCard
-                title="Machine Learning"
-                duration="3h 15m"
-                sets={7}
-                verified
-                onClick={() => handleSessionClick("3")}
-              />
+              {dashboardData.recentSessions.map((session) => (
+                <FeedCard
+                  key={session.id}
+                  title={session.title}
+                  duration={session.duration}
+                  sets={session.sets}
+                  verified={session.verified}
+                  onClick={() => handleSessionClick(session.id)}
+                />
+              ))}
             </div>
           </div>
 
@@ -116,19 +109,25 @@ const DashboardPage = () => {
                 <div className="space-y-4">
                   <StatDisplay
                     title="Total Sessions"
-                    value="127"
-                    description="+12 this week"
+                    value={dashboardData.overallStats.totalSessions.value}
+                    description={
+                      dashboardData.overallStats.totalSessions.description
+                    }
                   />
                   <StatDisplay
                     title="Hours Logged"
-                    value="342"
-                    description="This month"
+                    value={dashboardData.overallStats.hoursLogged.value}
+                    description={
+                      dashboardData.overallStats.hoursLogged.description
+                    }
                     highlight
                   />
                   <StatDisplay
                     title="Current Streak"
-                    value="42"
-                    description="days in a row"
+                    value={dashboardData.overallStats.currentStreak.value}
+                    description={
+                      dashboardData.overallStats.currentStreak.description
+                    }
                   />
                 </div>
               </div>
@@ -144,9 +143,14 @@ const DashboardPage = () => {
                   <Clock className="w-5 h-5 text-primary" />
                 </div>
                 <div className="flex flex-col items-center">
-                  <FocusProgress progress={75} variant="radial" size="8rem" />
+                  <FocusProgress
+                    progress={dashboardData.dailyGoal.progress}
+                    variant="radial"
+                    size="8rem"
+                  />
                   <p className="text-sm text-gray-400 mt-4">
-                    3h / 4h target completed
+                    {dashboardData.dailyGoal.completed} /{" "}
+                    {dashboardData.dailyGoal.target} target completed
                   </p>
                 </div>
               </div>

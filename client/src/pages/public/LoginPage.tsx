@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { loginSchema, type LoginFormData } from "../../schemas/auth";
+import { loginFormSchema, type LoginFormData } from "../../schemas/auth";
 import { Input, Button, SocialAuthButton } from "../../components/ui";
+import { useAuth } from "../../hooks/useAuth";
 
 const LoginPage = () => {
   const [formData, setFormData] = useState<LoginFormData>({
@@ -11,6 +12,7 @@ const LoginPage = () => {
   const [errors, setErrors] = useState<
     Partial<Record<keyof LoginFormData, string>>
   >({});
+  const { login, isLoading, error } = useAuth();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -20,10 +22,10 @@ const LoginPage = () => {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const result = loginSchema.safeParse(formData);
+    const result = loginFormSchema.safeParse(formData);
     try {
       if (!result.success) {
         const fieldErrors: Partial<Record<keyof LoginFormData, string>> = {};
@@ -36,7 +38,7 @@ const LoginPage = () => {
         return;
       }
       setErrors({});
-      console.log("Form data:", result.data);
+      await login(result.data);
     } catch (error) {
       console.error(error);
     }
@@ -77,6 +79,12 @@ const LoginPage = () => {
                 required
               />
 
+              {error ? (
+                <div className="text-sm text-error bg-error/10 border border-error/20 rounded-lg px-3 py-2">
+                  {error}
+                </div>
+              ) : null}
+
               <div className="flex justify-end">
                 <Link
                   to="/forgot-password"
@@ -86,8 +94,12 @@ const LoginPage = () => {
                 </Link>
               </div>
 
-              <Button type="submit" className="w-full text-gray-900">
-                Sign In
+              <Button
+                type="submit"
+                className="w-full text-gray-900"
+                disabled={isLoading}
+              >
+                {isLoading ? "Signing in..." : "Sign In"}
               </Button>
             </form>
 

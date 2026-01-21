@@ -2,6 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import LandingPage from "./pages/public/LandingPage";
 import LoginPage from "./pages/public/LoginPage";
 import RegisterPage from "./pages/public/RegisterPage";
+import { ProtectedRoute } from "./components/features/ProtectedRoute";
 import DashboardPage from "./pages/authenticated/DashboardPage";
 import SessionTimerPage from "./pages/authenticated/SessionTimerPage";
 import SessionHistoryPage from "./pages/authenticated/SessionHistoryPage";
@@ -23,19 +24,21 @@ const App = () => {
       <Route path="/" element={<LandingPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
-      <Route path="/dashboard" element={<DashboardPage />} />
-      <Route path="/sessions/new" element={<SessionTimerPage />} />
-      <Route path="/sessions/:id" element={<SessionDetailPage />} />
-      <Route path="/sessions" element={<SessionHistoryPage />} />
-      <Route path="/profile/stats" element={<ProfileStatsPage />} />
-      <Route path="/profile" element={<ProfilePage />} />
-      <Route path="/goals" element={<GoalsPage />} />
-      <Route path="/feed" element={<FeedPage />} />
-      <Route path="/friends" element={<FriendsPage />} />
-      <Route path="/squads/new" element={<CreateSquadPage />} />
-      <Route path="/squads/:id" element={<SquadDetailPage />} />
-      <Route path="/squads" element={<SquadsPage />} />
-      <Route path="/notifications" element={<NotificationsPage />} />
+      <Route element={<ProtectedRoute />}>
+        <Route path="/dashboard" element={<DashboardPage />} />
+        <Route path="/sessions/new" element={<SessionTimerPage />} />
+        <Route path="/sessions/:id" element={<SessionDetailPage />} />
+        <Route path="/sessions" element={<SessionHistoryPage />} />
+        <Route path="/profile/stats" element={<ProfileStatsPage />} />
+        <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/goals" element={<GoalsPage />} />
+        <Route path="/feed" element={<FeedPage />} />
+        <Route path="/friends" element={<FriendsPage />} />
+        <Route path="/squads/new" element={<CreateSquadPage />} />
+        <Route path="/squads/:id" element={<SquadDetailPage />} />
+        <Route path="/squads" element={<SquadsPage />} />
+        <Route path="/notifications" element={<NotificationsPage />} />
+      </Route>
   
     </Routes>
   );

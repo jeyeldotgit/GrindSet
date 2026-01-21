@@ -1,48 +1,61 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { registerSchema, type RegisterFormData } from "../../schemas/auth";
+import { registerFormSchema, type RegisterFormData } from "../../schemas/auth";
 import { Input, Button, SocialAuthButton } from "../../components/ui";
+import { useAuth } from "../../hooks/useAuth";
 
 const RegisterPage = () => {
+
   const [formData, setFormData] = useState<RegisterFormData>({
     email: "",
     password: "",
     confirmPassword: "",
   });
-  const [errors, setErrors] = useState<
-    Partial<Record<keyof RegisterFormData, string>>
-  >({});
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const { signup, isLoading, error } = useAuth();
 
+  // Handle form data change
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+
+    // Update form data
     setFormData((prev) => ({ ...prev, [name]: value }));
-    if (errors[name as keyof RegisterFormData]) {
-      setErrors((prev) => ({ ...prev, [name]: undefined }));
+
+    // Clear error for this field
+    if (errors[name]) {
+      setErrors((prev) => {
+        const newErrors = { ...prev };
+        delete newErrors[name];
+        return newErrors;
+      });
     }
-  };
+  }
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  // Handle form submission
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setErrors({});
 
-    const result = registerSchema.safeParse(formData);
     try {
-      if (!result.success) {
-        const fieldErrors: Partial<Record<keyof RegisterFormData, string>> = {};
-        result.error.issues.forEach((error) => {
-          if (error.path[0]) {
-            fieldErrors[error.path[0] as keyof RegisterFormData] =
-              error.message;
-          }
+      const validated = registerFormSchema.safeParse(formData);
+      if (!validated.success) {
+        const fieldErrors: Record<string, string> = {};
+        validated.error.issues.forEach((issue) => {
+          const key = issue.path[0] ? String(issue.path[0]) : "form";
+          fieldErrors[key] = issue.message;
         });
         setErrors(fieldErrors);
         return;
       }
-      setErrors({});
-      console.log("Form data:", result.data);
+
+      await signup(validated.data);
     } catch (error) {
-      console.error(error);
+      if (error instanceof Error) {
+        setErrors({ form: error.message });
+      }
     }
-  };
+  }
+
 
   return (
     <div className="min-h-screen bg-base-100 flex items-center justify-center px-4 py-12">
@@ -92,8 +105,18 @@ const RegisterPage = () => {
                 required
               />
 
-              <Button type="submit" className="w-full text-gray-900">
-                Create Account
+              {error || errors.form ? (
+                <div className="text-sm text-error bg-error/10 border border-error/20 rounded-lg px-3 py-2">
+                  {error ?? errors.form}
+                </div>
+              ) : null}
+
+              <Button
+                type="submit"
+                className="w-full text-gray-900"
+                disabled={isLoading}
+              >
+                {isLoading ? "Creating account..." : "Create Account"}
               </Button>
             </form>
 
