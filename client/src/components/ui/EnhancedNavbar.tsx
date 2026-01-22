@@ -1,5 +1,5 @@
-import { useState, useMemo } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { useState, useMemo, useRef, useEffect } from "react";
+import { Link, useLocation, } from "react-router-dom";
 import {
   Zap,
   Target,
@@ -64,6 +64,31 @@ const EnhancedNavbar = ({
     setUserMenuOpen(false);
   };
 
+  const userMenuRef = useRef<HTMLDivElement>(null);
+  const userMenuDropdownRef = useRef<HTMLUListElement>(null);
+
+  // Close menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        userMenuRef.current &&
+        userMenuDropdownRef.current &&
+        !userMenuRef.current.contains(event.target as Node) &&
+        !userMenuDropdownRef.current.contains(event.target as Node)
+      ) {
+        setUserMenuOpen(false);
+      }
+    };
+
+    if (userMenuOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [userMenuOpen]);
+
   return (
     <nav
       className={`navbar bg-base-100 border-b border-white/5 ${className}`}
@@ -115,17 +140,13 @@ const EnhancedNavbar = ({
           </Link>
 
           {/* User Menu */}
-          <div className="dropdown dropdown-end">
+          <div className="relative">
             <div
               tabIndex={0}
               role="button"
               className="btn btn-ghost btn-circle focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-base-100"
-              onClick={() => setUserMenuOpen(!userMenuOpen)}
-              onBlur={(e) => {
-                if (!e.currentTarget.contains(e.relatedTarget as Node)) {
-                  setTimeout(() => setUserMenuOpen(false), 200);
-                }
-              }}
+              onClick={() => setUserMenuOpen((prev) => !prev)}
+              ref={userMenuRef}
               aria-label="User menu"
               aria-expanded={userMenuOpen}
             >
@@ -133,8 +154,9 @@ const EnhancedNavbar = ({
             </div>
             {userMenuOpen && (
               <ul
+                ref={userMenuDropdownRef}
                 tabIndex={0}
-                className="dropdown-content menu bg-neutral border border-white/5 rounded-box w-52 p-2 shadow-2xl z-50"
+                className="absolute right-0 mt-2 menu bg-neutral border border-white/5 rounded-box w-52 p-2 shadow-2xl z-50"
               >
                 <li>
                   <Link

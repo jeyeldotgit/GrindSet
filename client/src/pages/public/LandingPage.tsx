@@ -1,8 +1,20 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Zap, Target, Trophy, Flame } from "lucide-react";
 import { Navbar, Button, GrindCard, StatDisplay } from "../../components/ui";
+import { useAuthContext } from "../../context/AuthContext";
+import { useEffect } from "react";
 
 const LandingPage = () => {
+
+  const { isAuthenticated } = useAuthContext();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/dashboard");
+    }
+  }, [isAuthenticated, navigate]);
+
   return (
     <div className="min-h-screen bg-base-100">
       <Navbar
