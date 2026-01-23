@@ -1,22 +1,25 @@
 import { useNavigate } from "react-router-dom";
+import { useGrind } from "./useGrinds";
 
 export const useDashboard = () => {
   const navigate = useNavigate();
 
-  const handleStartSession = () => {
-    console.log("Start session clicked");
-    navigate("/sessions/new");
-  };
+  // 1. Consume the "Grind" hook
+  const { grindSesions, status, fetchAllGrindSessions } = useGrind();
 
-  const handleSessionClick = (sessionId: string) => {
-    console.log(`Session clicked: ${sessionId}`);
+  // 2. Add Dashboard-specific logic
+  const handleStartSession = () => navigate("/sessions/new");
+  const handleSessionClick = (sessionId: string) =>
     navigate(`/sessions/${sessionId}`);
-  };
+
+  // 3. Transform Raw Grind Data into "Dashboard Data"
+  // This is where the magic happens—converting DB rows into UI display values
+  const sessionsCount = grindSesions?.length || 0;
 
   const dashboardData = {
     todayPerformance: {
       sessions: {
-        value: "5",
+        value: sessionsCount.toString(),
         description: "+2 from yesterday",
       },
       time: {
@@ -28,29 +31,15 @@ export const useDashboard = () => {
         description: "Personal best",
       },
     },
-    recentSessions: [
-      {
-        id: "1",
-        title: "Advanced Calculus",
-        duration: "2h 45m",
-        sets: 5,
-        verified: true,
-      },
-      {
-        id: "2",
-        title: "Data Structures",
-        duration: "1h 30m",
-        sets: 3,
-        verified: true,
-      },
-      {
-        id: "3",
-        title: "Machine Learning",
-        duration: "3h 15m",
-        sets: 7,
-        verified: true,
-      },
-    ],
+    // Map your real database sessions to the format your UI expects
+    recentSessions:
+      grindSesions?.slice(0, 3).map((s) => ({
+        id: s.id,
+        title: s.title,
+        duration: `${Math.floor(s.duration / 60)}m`,
+        sets: s.pomodoroSets,
+        verified: s.status === "COMPLETED",
+      })) || [],
     overallStats: {
       totalSessions: {
         value: "127",
@@ -75,6 +64,8 @@ export const useDashboard = () => {
   return {
     handleStartSession,
     handleSessionClick,
+    fetchAllGrindSessions,
+    status,
     dashboardData,
     unreadNotifications: 3,
   };

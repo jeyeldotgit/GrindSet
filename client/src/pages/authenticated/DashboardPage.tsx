@@ -4,9 +4,11 @@ import {
   EnhancedNavbar,
   Button,
   StatDisplay,
-  FeedCard,
   FocusProgress,
 } from "../../components/ui";
+
+import Sessions from "../../components/dashboard/Sessions";
+
 import { useDashboard } from "../../hooks/useDashboard";
 
 const DashboardPage = () => {
@@ -72,31 +74,10 @@ const DashboardPage = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Main Content - Recent Sessions */}
-          <div className="lg:col-span-2">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-2xl font-black italic uppercase tracking-tighter">
-                Recent Sessions
-              </h2>
-              <Link
-                to="/sessions"
-                className="text-sm text-primary hover:underline font-semibold"
-              >
-                View All
-              </Link>
-            </div>
-            <div className="space-y-4">
-              {dashboardData.recentSessions.map((session) => (
-                <FeedCard
-                  key={session.id}
-                  title={session.title}
-                  duration={session.duration}
-                  sets={session.sets}
-                  verified={session.verified}
-                  onClick={() => handleSessionClick(session.id)}
-                />
-              ))}
-            </div>
-          </div>
+          <Sessions
+            dashboardData={dashboardData}
+            handleSessionClick={handleSessionClick}
+          ></Sessions>
 
           {/* Sidebar - Stats & Progress */}
           <div className="space-y-6">

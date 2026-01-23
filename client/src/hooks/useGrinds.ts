@@ -31,18 +31,22 @@ export const useGrind = (): UseGrindResult => {
     throw new Error("useGrind must be used within an authenticated context");
   }
 
-  const handleRequest = useCallback(async (request: () => Promise<void>) => {
-    setStatus("loading");
-    setError(null);
-    try {
-      await request();
-    } catch (error) {
-      setError((error as Error).message);
-      setStatus("error");
-    } finally {
-      setStatus("success");
-    }
-  }, []);
+  const handleRequest = useCallback(
+    async <T>(request: () => Promise<T>): Promise<T | undefined> => {
+      setStatus("loading");
+      setError(null);
+      try {
+        const result = await request();
+        setStatus("success");
+        return result; // Allows components to 'await' the result
+      } catch (error) {
+        setError((error as Error).message);
+        setStatus("error");
+        return undefined;
+      }
+    },
+    [],
+  );
 
   // Action: Fetch all grind sessions for the user
   const fetchAllGrindSessions = useCallback(() => {
