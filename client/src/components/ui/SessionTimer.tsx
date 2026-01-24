@@ -1,12 +1,13 @@
+
+const formatTime = (value: number): string => {
+  return value.toString().padStart(2, "0");
+};
+
 type SessionTimerProps = {
   hours: number;
   minutes: number;
   seconds: number;
   className?: string;
-};
-
-const formatTime = (value: number): string => {
-  return value.toString().padStart(2, "0");
 };
 
 const SessionTimer = ({
@@ -29,4 +30,3 @@ const SessionTimer = ({
 };
 
 export default SessionTimer;
-

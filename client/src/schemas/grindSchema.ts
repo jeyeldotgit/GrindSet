@@ -28,7 +28,7 @@ const GrindSessionSchema = z.object({
   lastPausedAt: z.coerce.date().nullable(),
 });
 
-// 🟢 For POST Requests (The "Request" shape)
+// For POST Requests (The "Request" shape)
 // We omit the fields the server generates automatically
 export const CreateGrindSessionRequestSchema = GrindSessionSchema.omit({
   id: true,
@@ -42,13 +42,13 @@ export const CreateGrindSessionRequestSchema = GrindSessionSchema.omit({
   startedAt: z.string().datetime(),
 });
 
-// 🔵 For API Responses (The "Source of Truth")
+// For API Responses (The "Source of Truth")
 export const GrindSessionResponseSchema = z.object({
   grindSession: GrindSessionSchema,
   message: z.string(),
 });
 
-// 🟦 Inferring Types for your Service Layer
+// Inferring Types for your Service Layer
 export type GrindSession = z.infer<typeof GrindSessionSchema>;
 export type CreateGrindSessionRequest = z.infer<
   typeof CreateGrindSessionRequestSchema

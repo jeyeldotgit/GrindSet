@@ -1,33 +1,22 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Play, Pause, Square, Save } from "lucide-react";
-import { EnhancedNavbar, Breadcrumbs, Button, SessionTimer, Input, Textarea } from "../../components/ui";
+import {
+  EnhancedNavbar,
+  Breadcrumbs,
+  Button,
+  SessionTimer,
+  Input,
+  Textarea,
+} from "../../components/ui";
+import Timer from "../../components/session/Timer";
 
 const SessionTimerPage = () => {
-  const [isRunning, setIsRunning] = useState(false);
   const [hours, setHours] = useState(0);
   const [minutes, setMinutes] = useState(0);
   const [seconds, setSeconds] = useState(0);
   const [sessionTitle, setSessionTitle] = useState("");
   const [sessionNotes, setSessionNotes] = useState("");
-
-  const handleStart = () => {
-    console.log("Start session clicked");
-    setIsRunning(true);
-  };
-
-  const handlePause = () => {
-    console.log("Pause session clicked");
-    setIsRunning(false);
-  };
-
-  const handleStop = () => {
-    console.log("Stop session clicked");
-    setIsRunning(false);
-    setHours(0);
-    setMinutes(0);
-    setSeconds(0);
-  };
 
   const handleSave = () => {
     console.log("Save session clicked", {
@@ -52,38 +41,8 @@ const SessionTimerPage = () => {
             <p className="text-gray-400">Track your deep work session</p>
           </div>
 
-          {/* Timer Display */}
-          <div className="card bg-neutral border border-white/5 mb-8">
-            <div className="card-body items-center text-center py-12">
-              <SessionTimer hours={hours} minutes={minutes} seconds={seconds} />
-              <div className="flex gap-4 mt-8">
-                {!isRunning ? (
-                  <Button
-                    onClick={handleStart}
-                    className="text-gray-900"
-                  >
-                    <Play className="w-5 h-5 mr-2" />
-                    Start
-                  </Button>
-                ) : (
-                  <Button
-                    onClick={handlePause}
-                    variant="ghost"
-                  >
-                    <Pause className="w-5 h-5 mr-2" />
-                    Pause
-                  </Button>
-                )}
-                <Button
-                  onClick={handleStop}
-                  variant="ghost"
-                >
-                  <Square className="w-5 h-5 mr-2" />
-                  Stop
-                </Button>
-              </div>
-            </div>
-          </div>
+          {/* Timer Component */}
+          <Timer />
 
           {/* Session Details Form */}
           <div className="card bg-neutral border border-white/5">
@@ -129,4 +88,3 @@ const SessionTimerPage = () => {
 };
 
 export default SessionTimerPage;
-
