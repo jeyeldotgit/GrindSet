@@ -15,7 +15,11 @@ type UseGrindResult = {
   refetch: () => Promise<void>;
   fetchAllGrindSessions: () => void;
   fetchGrindSessionById: (id: string) => void;
-  createGrindSession: (data: CreateGrindSessionRequest) => void;
+  createGrindSession: (data: {
+    title: string;
+    notes: string;
+    subject: string;
+  }) => Promise<GrindSession | undefined>;
   updateGrindSession: (data: CreateGrindSessionRequest, id: string) => void;
   deleteGrindSession: (id: string) => Promise<void>;
 };
@@ -36,9 +40,9 @@ export const useGrind = (): UseGrindResult => {
       setStatus("loading");
       setError(null);
       try {
-        const result = await request();
+        const result = await request(); // Capture the result
         setStatus("success");
-        return result; // Allows components to 'await' the result
+        return result; // RETURN the result here!
       } catch (error) {
         setError((error as Error).message);
         setStatus("error");
@@ -54,12 +58,14 @@ export const useGrind = (): UseGrindResult => {
       const sessions = await grindService.getAllGrindSessions(user.id);
       const sessionData = sessions.map((item) => item.grindSession);
       setGrindSessions(sessionData);
+
+      return sessions;
     });
   }, [handleRequest, user.id]);
 
   // Action: refetch grind sessions
   const refetch = useCallback(async () => {
-    await fetchAllGrindSessions();
+    return await fetchAllGrindSessions();
   }, [fetchAllGrindSessions]);
 
   // Action: Fetch session by ID
@@ -85,6 +91,8 @@ export const useGrind = (): UseGrindResult => {
             return [...safePrev, session.grindSession];
           }
         });
+
+        return session;
       });
     },
     [handleRequest],
@@ -92,14 +100,16 @@ export const useGrind = (): UseGrindResult => {
 
   // Action: Create a new session
   const createGrindSession = useCallback(
-    (data: CreateGrindSessionRequest) => {
-      handleRequest(async () => {
+    async (data: { title: string; notes: string; subject: string }) => {
+      return await handleRequest(async () => {
         const newSession = await grindService.createGrindSession(data);
 
         setGrindSessions((prevSessions) => [
           ...prevSessions,
           newSession.grindSession,
         ]);
+
+        return newSession.grindSession;
       });
     },
     [handleRequest],
@@ -116,6 +126,8 @@ export const useGrind = (): UseGrindResult => {
             session.id === id ? updatedSession.grindSession : session,
           ),
         );
+
+        return updatedSession;
       });
     },
     [handleRequest],
@@ -127,7 +139,7 @@ export const useGrind = (): UseGrindResult => {
       await handleRequest(async () => {
         await grindService.deleteGrindSession(id);
         // Refresh the list so the deleted item disappears
-        await fetchAllGrindSessions();
+        return await fetchAllGrindSessions();
       });
     },
     [handleRequest, fetchAllGrindSessions],

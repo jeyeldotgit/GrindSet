@@ -29,11 +29,29 @@ import {
 } from "../schemas/grindSchema";
 
 // Create a new grind session
-export const createGrindSession = async (
-  payload: CreateGrindSessionRequest,
-): Promise<GrindSessionResponse> => {
-  const parsedPayload = CreateGrindSessionRequestSchema.parse(payload);
+export const createGrindSession = async (payload: {
+  title: string;
+  notes: string;
+  subject: string;
+}) => {
+  // Merge the UI data with the required defaults for the schema
+  const fullPayload = {
+    // REFACTOR THIS CODE TO SET THE pomodoroSets AND duration BASED ON USER PREFERENCES LATER || NUllABLE
+    ...payload,
+    duration: 1500, // 25 mins default
+    pomodoroSets: 1,
+    status: "ACTIVE",
+    isHardMode: false,
+    didNotFinish: false,
+    startedAt: new Date().toISOString(),
+    endedAt: new Date().toISOString(),
+    photoUrl: null,
+    subject: "General",
+  };
 
+  const parsedPayload = CreateGrindSessionRequestSchema.parse(fullPayload);
+
+  // Now the request will actually fire
   const response = await apiClient("/grind-sessions", {
     method: "POST",
     body: parsedPayload,
@@ -88,4 +106,30 @@ export const deleteGrindSession = async (
   });
 
   return response as { message: string };
+};
+
+// Start the timer for a grind session
+export const startTimer = async (id: string): Promise<GrindSessionResponse> => {
+  const response = await apiClient(`/grind-sessions/${id}/start`, {
+    method: "POST",
+  });
+
+  return GrindSessionResponseSchema.parse(response);
+};
+
+// Pause the timer for a grind session
+export const pauseTimer = async (id: string): Promise<GrindSessionResponse> => {
+  const response = await apiClient(`/grind-sessions/${id}/pause`, {
+    method: "POST",
+  });
+
+  return GrindSessionResponseSchema.parse(response);
+};
+
+// Stop the timer for a grind session
+export const stopTimer = async (id: string): Promise<GrindSessionResponse> => {
+  const response = await apiClient(`/grind-sessions/${id}/stop`, {
+    method: "POST",
+  });
+  return GrindSessionResponseSchema.parse(response);
 };

@@ -1,5 +1,6 @@
 export { default as Button } from "./Button";
 export { default as SessionTimer } from "./SessionTimer";
+export { default as MiniTimer } from "./MiniTimer";
 export { default as SuccessBadge } from "./SuccessBadge";
 export { default as StatDisplay } from "./StatDisplay";
 export { default as FocusProgress } from "./FocusProgress";

@@ -2,69 +2,55 @@ import { useState, useEffect } from "react";
 import { Play, Pause, Square, Coffee, Brain } from "lucide-react";
 import { Button } from "../ui";
 import SessionTimer from "../ui/SessionTimer";
+import { useGrindTimer } from "../../hooks/useGrindTimer";
 
-const Timer = () => {
-  const [inputFocusTime, setInputFocusTime] = useState(25); // Default 25 minutes
-  const [inputBreakTime, setInputBreakTime] = useState(5); // Default 5 minutes
+interface TimerProps {
+  sessionId: string;
+}
 
-  const FOCUS_TIME = inputFocusTime * 60;
-  const BREAK_TIME = inputBreakTime * 60;
+const Timer = ({ sessionId }: TimerProps) => {
+  // Local state for UI settings that don't need to be global.
+  const [inputFocusTime, setInputFocusTime] = useState(25);
+  const [inputBreakTime, setInputBreakTime] = useState(5);
+  const [showSettings, setShowSettings] = useState(true);
 
-  const [isRunning, setIsRunning] = useState(false);
-  const [mode, setMode] = useState<"focus" | "break">("focus");
-  const [timeLeft, setTimeLeft] = useState(FOCUS_TIME);
-  const [pomodoroSets, setPomodoroSets] = useState(0);
-  const [showSettings, setShowSettings] = useState(true); // Start with settings shown
+  // All timer-related state and actions now come from our custom hook.
+  const { timeLeft, isRunning, mode, start, pause, reset, clearSession } = useGrindTimer();
 
-  // Reset timeLeft when focus or break time changes
+  // The countdown logic is now in the useGrindTimer hook.
+  // We only need to handle UI and user input here.
+
+  // The handle functions now call the actions from the hook.
+  const handleStart = () => {
+    // The component doesn't need to know *how* start works, just that it can be called.
+    // The async logic and API call are handled in the Zustand store.
+    start(sessionId);
+    setShowSettings(false); // Switch to timer view on start
+  };
+
+  const handlePause = () => {
+    pause();
+  };
+
+  const handleStop = () => {
+    // The reset action in the store handles resetting the state.
+    reset(inputFocusTime * 60);
+    setShowSettings(true); // Show settings on stop
+    // Clear the session when stopped
+    clearSession();
+  };
+
+  // When the user changes the focus time slider, update the timer in the store
+  // only if the timer is not currently running.
   useEffect(() => {
     if (!isRunning) {
-      setTimeLeft(mode === "focus" ? FOCUS_TIME : BREAK_TIME);
+      reset(inputFocusTime * 60);
     }
-  }, [inputFocusTime, inputBreakTime, mode, isRunning]);
+  }, [inputFocusTime, isRunning, reset]);
 
   const hours = Math.floor(timeLeft / 3600);
   const minutes = Math.floor((timeLeft % 3600) / 60);
   const seconds = timeLeft % 60;
-
-  // Handle timer countdown
-  useEffect(() => {
-    let interval: number;
-
-    if (isRunning && timeLeft > 0) {
-      interval = setInterval(() => {
-        setTimeLeft((prev) => prev - 1);
-      }, 1000);
-    }
-
-    return () => clearInterval(interval);
-  }, [isRunning]);
-
-  // Handle session completion when timeLeft reaches 0
-  useEffect(() => {
-    if (timeLeft === 0 && isRunning) {
-      setIsRunning(false);
-      if (mode === "focus") {
-        setPomodoroSets((prev) => prev + 1);
-        setMode("break");
-        setTimeLeft(BREAK_TIME);
-      } else {
-        setMode("focus");
-        setTimeLeft(FOCUS_TIME);
-      }
-    }
-  }, [timeLeft, isRunning, mode]);
-
-  const handleStart = () => setIsRunning(true);
-  const handlePause = () => setIsRunning(false);
-
-  const handleStop = () => {
-    setIsRunning(false);
-    setMode("focus");
-    setTimeLeft(FOCUS_TIME);
-    setInputFocusTime(25);
-    setInputBreakTime(5);
-  };
 
   return (
     <div className="card bg-neutral border border-white/5 mb-8">
@@ -83,7 +69,9 @@ const Timer = () => {
 
         <div className="form-control w-52 mb-4">
           <label className="label cursor-pointer">
-            <span className="label-text">{showSettings ? "Show Timer" : "Timer Sets"}</span>
+            <span className="label-text">
+              {showSettings ? "Show Settings" : "Show Timer"}
+            </span>
             <input
               type="checkbox"
               className="toggle toggle-primary"
@@ -127,13 +115,21 @@ const Timer = () => {
                 />
               </label>
             </div>
+            <Button
+              onClick={handleStart}
+              className="bg-primary text-gray-900 hover:bg-primary/90 mt-4"
+            >
+              <Play className="w-5 h-5 mr-2" />
+              Start Session
+            </Button>
           </div>
         ) : (
           <>
             <SessionTimer hours={hours} minutes={minutes} seconds={seconds} />
 
             <p className="mt-2 text-xs text-gray-500 uppercase tracking-widest">
-              Sets Completed: {pomodoroSets}
+              {/* This will need to come from the store eventually */}
+              Sets Completed: 0
             </p>
 
             <div className="flex gap-4 mt-8">

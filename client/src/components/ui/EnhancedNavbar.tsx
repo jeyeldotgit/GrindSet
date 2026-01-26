@@ -1,5 +1,5 @@
 import { useState, useMemo, useRef, useEffect } from "react";
-import { Link, useLocation, } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import {
   Zap,
   Target,
@@ -13,6 +13,8 @@ import {
   BarChart3,
 } from "lucide-react";
 import { getNavRoutes } from "../../routes/routeConfig";
+import { useAuth } from "../../hooks/useAuth";
+import MiniTimer from "./MiniTimer";
 
 type NavItem = {
   label: string;
@@ -43,6 +45,9 @@ const EnhancedNavbar = ({
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
 
+  // Import logout from useAuth
+  const { logout, isLoading } = useAuth();
+
   // Derive nav items from route config
   const mainNavItems: NavItem[] = useMemo(() => {
     return getNavRoutes().map((route) => ({
@@ -59,8 +64,14 @@ const EnhancedNavbar = ({
     return location.pathname.startsWith(path);
   };
 
-  const handleLogout = () => {
-    console.log("Logout clicked");
+  const handleLogout = async () => {
+    if (isLoading) return; // Prevent multiple clicks
+    try {
+      await logout();
+    } catch (err) {
+      console.error("Logout error:", err);
+    }
+
     setUserMenuOpen(false);
   };
 
@@ -127,6 +138,9 @@ const EnhancedNavbar = ({
       <div className="navbar-end">
         {/* Desktop Actions */}
         <div className="hidden lg:flex items-center gap-2">
+          {/* Mini Timer - shows when active session exists */}
+          <MiniTimer />
+
           {/* Notifications */}
           <Link
             to="/notifications"
@@ -233,6 +247,10 @@ const EnhancedNavbar = ({
       {mobileMenuOpen && (
         <div className="lg:hidden absolute top-full left-0 right-0 bg-base-100 border-b border-white/5 shadow-2xl z-50">
           <div className="flex flex-col p-4 space-y-2">
+            {/* Mini Timer in mobile menu */}
+            <div className="pb-2 border-b border-white/5 mb-2">
+              <MiniTimer />
+            </div>
             {mainNavItems.map((item) => (
               <Link
                 key={item.path}
@@ -294,4 +312,3 @@ const EnhancedNavbar = ({
 };
 
 export default EnhancedNavbar;
-
