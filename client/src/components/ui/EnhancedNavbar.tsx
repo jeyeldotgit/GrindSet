@@ -114,7 +114,12 @@ const EnhancedNavbar = ({
           aria-label="GrindSet Home"
         >
           GRINDSET
+          
         </Link>
+
+        <div className=" lg:hidden lg:ml-4">
+          <MiniTimer />
+        </div>
 
         {/* Desktop Navigation */}
         <div className="hidden lg:flex lg:ml-4">
@@ -139,7 +144,9 @@ const EnhancedNavbar = ({
         {/* Desktop Actions */}
         <div className="hidden lg:flex items-center gap-2">
           {/* Mini Timer - shows when active session exists */}
-          <MiniTimer />
+          <div>
+            <MiniTimer />
+          </div>
 
           {/* Notifications */}
           <Link
@@ -248,9 +255,9 @@ const EnhancedNavbar = ({
         <div className="lg:hidden absolute top-full left-0 right-0 bg-base-100 border-b border-white/5 shadow-2xl z-50">
           <div className="flex flex-col p-4 space-y-2">
             {/* Mini Timer in mobile menu */}
-            <div className="pb-2 border-b border-white/5 mb-2">
+            {/* <div className="pb-2 border-b border-white/5 mb-2">
               <MiniTimer />
-            </div>
+            </div> */}
             {mainNavItems.map((item) => (
               <Link
                 key={item.path}

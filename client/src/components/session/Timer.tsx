@@ -12,7 +12,7 @@ const Timer = ({ sessionId }: TimerProps) => {
   // Local state for UI settings that don't need to be global.
   const [inputFocusTime, setInputFocusTime] = useState(25);
   const [inputBreakTime, setInputBreakTime] = useState(5);
-  const [showSettings, setShowSettings] = useState(true);
+  const [showSettings, setShowSettings] = useState(false);
 
   // All timer-related state and actions now come from our custom hook.
   const { timeLeft, isRunning, mode, start, pause, reset, clearSession } = useGrindTimer();
